@@ -107,6 +107,54 @@ as the tool just working rather than your agent flailing.
 including when something fails. Your agent never has to guess whether it got a
 result or an error message.
 
+Here is what `sb offer 12345 --amount 150` hands back, shortened and with
+illustrative numbers:
+
+```json
+{
+  "schemaVersion": "1",
+  "command": "offer",
+  "ok": true,
+  "data": {
+    "merchant": { "id": 12345, "name": "Example Store" },
+    "offers": [
+      {
+        "status": "active",
+        "title": "Up to 6% Cashback",
+        "reward": "Up to 6% Cashback",
+        "isUpsized": false,
+        "cap": null,
+        "tiers": [
+          {
+            "id": "t1",
+            "label": "All Customers",
+            "reward": "6% Cashback",
+            "cap": null,
+            "previous": null
+          }
+        ]
+      }
+    ],
+    "estimate": {
+      "amount": { "value": 150, "currency": "SGD" },
+      "byTier": [
+        {
+          "tierId": "t1",
+          "label": "All Customers",
+          "cashback": { "value": 9, "currency": "SGD" }
+        }
+      ]
+    }
+  },
+  "warnings": [],
+  "next": ["sb go 12345"],
+  "meta": { "country": "SG", "generatedAt": "2026-11-20T04:12:08.441Z" }
+}
+```
+
+A failure has the same outer shape, with `ok` set to `false` and an `error`
+object where `data` was.
+
 **Every response says what to do next.** Each one carries a `next` list: the
 commands that make sense from here. After a search, that is the offer lookup for
 the store it found. When you are not signed in, the error does not only say so —
